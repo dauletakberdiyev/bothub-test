@@ -14,8 +14,33 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-  avatar   String
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  avatar    String
+  feedbacks Feedback[]
+}
+
+model Feedback {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  category    Category @relation(fields: [category_id], references: [id])
+  category_id Int
+  Status      Status?  @relation(fields: [status_id], references: [id])
+  status_id   Int
+  author      User     @relation(fields: [author_id], references: [id])
+  author_id   Int
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  title     String     @unique
+  feedbacks Feedback[]
+}
+
+model Status {
+  id        Int        @id @default(autoincrement())
+  title     String     @unique
+  feedbacks Feedback[]
 }
