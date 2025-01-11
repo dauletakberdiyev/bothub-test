@@ -19,6 +19,7 @@ model User {
   password  String
   avatar    String
   feedbacks Feedback[]
+  upvotes   Upvote[]
 }
 
 model Feedback {
@@ -33,8 +34,19 @@ model Feedback {
   author_id   Int
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
+  upvotes     Upvote[]
 }
 
+model Upvote {
+  id          Int      @id @default(autoincrement())
+  feedback    Feedback @relation(fields: [feedback_id], references: [id])
+  feedback_id Int
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     Int
+  creted_at   DateTime @default(now())
+
+  @@unique([feedback_id, user_id])
+}
 model Category {
   id        Int        @id @default(autoincrement())
   title     String     @unique
