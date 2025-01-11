@@ -21,7 +21,7 @@ export const createFeedback = async (title: string, description: string, categor
                     title: true,
                 }
             },
-            Status: {
+            status: {
                 select: {
                     id: true,
                     title: true,
@@ -42,8 +42,15 @@ export const createFeedback = async (title: string, description: string, categor
 export const getFeedbacks = async (req: Request) => {
     const { page, limit } = getPaginationParams(req);
 
+    const { category, status, sortBy } = req.query;
+
     // Get the total number of users
-    const feedbackCount = await prisma.feedback.count();
+    const feedbackCount = await prisma.feedback.count({
+        where: {
+            category_id: category ? parseInt(category as string) : undefined,
+            status_id: status ? parseInt(status as string) : undefined,
+        }
+    });
 
     // Calculate the offset based on page and limit
     const offset = (page - 1) * limit;
@@ -61,7 +68,7 @@ export const getFeedbacks = async (req: Request) => {
                     title: true,
                 }
             },
-            Status: {
+            status: {
                 select: {
                     id: true,
                     title: true,
@@ -73,6 +80,10 @@ export const getFeedbacks = async (req: Request) => {
                     email: true,
                }
             }
+        },
+        where: {
+            category_id: category ? parseInt(category as string) : undefined,
+            status_id: status ? parseInt(status as string) : undefined,
         }
     });
 
@@ -117,6 +128,7 @@ export const updateFeedback = async (id: number, title: string, description: str
             description,
             category_id: category,
             status_id: status,
+            updated_at: new Date(),
         },
         where: {id},
     });
@@ -135,7 +147,7 @@ export const getFeedback = async (id: number) => {
                     title: true,
                 }
             },
-            Status: {
+            status: {
                 select: {
                     id: true,
                     title: true,

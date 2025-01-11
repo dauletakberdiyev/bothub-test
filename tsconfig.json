@@ -110,5 +110,5 @@
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],
-  "files":["./src/types/express/types.d.ts"]
+  "files":["./src/types/express/types.d.ts"] 
 }
