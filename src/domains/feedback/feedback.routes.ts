@@ -1,5 +1,5 @@
 import express from 'express';
-import { create, index, remove, update } from './feedback.controller';
+import { create, index, remove, update, show } from './feedback.controller';
 import { authenticate } from '../../middleware/auth.middleware';
 
 const router = express.Router();
@@ -12,5 +12,7 @@ router.get('/', authenticate as any, index);
 router.delete('/:id', authenticate as any, remove);
 //Update feedback route
 router.put('/:id', authenticate as any, update);
+//Show feedback route
+router.get('/:id', authenticate as any, show);
 
 export default router;
