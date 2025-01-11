@@ -62,6 +62,7 @@ export const getFeedbacks = async (req: Request) => {
             id: true,
             title: true,
             description: true,
+            created_at: true,
             category: {
                 select: {
                     id: true,
@@ -79,15 +80,23 @@ export const getFeedbacks = async (req: Request) => {
                     id: true,
                     email: true,
                }
+            },
+            _count:{
+                select: {
+                    upvotes: true,
+                },
             }
         },
         where: {
             category_id: category ? parseInt(category as string) : undefined,
             status_id: status ? parseInt(status as string) : undefined,
         },
-        orderBy: {
-            created_at: orderBy === 'createdAt' ? 'desc' : undefined,
-        },
+        orderBy: [
+            {created_at: orderBy === 'createdAt' ? 'desc' : undefined},
+            {upvotes: {
+                _count: orderBy === 'upvote' ? 'desc' : 'asc',
+            }}
+        ],
     });
 
     // Calculate total pages
