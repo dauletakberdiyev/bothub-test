@@ -1,3 +1,5 @@
+import { getPaginationParams } from "../../helpers/helper";
+import { Request } from 'express';
 import prisma from "../../prisma/prisma";
 
 export const createFeedback = async (title: string, description: string, category: number, status: number, author_id: number) => {
@@ -37,8 +39,18 @@ export const createFeedback = async (title: string, description: string, categor
     return feedback;
 };
 
-export const getFeedbacks = async () => {
+export const getFeedbacks = async (req: Request) => {
+    const { page, limit } = getPaginationParams(req);
+
+    // Get the total number of users
+    const feedbackCount = await prisma.feedback.count();
+
+    // Calculate the offset based on page and limit
+    const offset = (page - 1) * limit;
+
     const feedbacks = await prisma.feedback.findMany({
+        skip: offset,
+        take: limit,
         select: {
             id: true,
             title: true,
@@ -64,5 +76,15 @@ export const getFeedbacks = async () => {
         }
     });
 
-    return feedbacks;
+    // Calculate total pages
+    const totalPages = Math.ceil(feedbackCount / limit);
+
+
+    return {
+        page,
+        limit,
+        totalPages,
+        feedbackCount,
+        data: feedbacks,
+    };
 }

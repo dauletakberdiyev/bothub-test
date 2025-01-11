@@ -22,7 +22,7 @@ export const create = async (req: Request, res: Response) => {
 
 export const index = async (req: Request, res: Response) => {
     try {
-        const feedbacks = await getFeedbacks();
+        const feedbacks = await getFeedbacks(req);
 
         res.status(200).json({
             message: 'Feedback fetched',
