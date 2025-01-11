@@ -79,12 +79,17 @@ export const getFeedbacks = async (req: Request) => {
     // Calculate total pages
     const totalPages = Math.ceil(feedbackCount / limit);
 
-
     return {
         page,
         limit,
         totalPages,
-        feedbackCount,
+        total: feedbackCount,
         data: feedbacks,
     };
+}
+
+export const deleteFeedback = async (id: number) => {
+    const feedback = await prisma.feedback.delete({
+        where: {id}
+    });
 }
