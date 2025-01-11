@@ -42,8 +42,8 @@ export const createFeedback = async (title: string, description: string, categor
 export const getFeedbacks = async (req: Request) => {
     const { page, limit } = getPaginationParams(req);
 
-    const { category, status, sortBy } = req.query;
-
+    const { category, status, orderBy } = req.query;
+    
     // Get the total number of users
     const feedbackCount = await prisma.feedback.count({
         where: {
@@ -84,7 +84,10 @@ export const getFeedbacks = async (req: Request) => {
         where: {
             category_id: category ? parseInt(category as string) : undefined,
             status_id: status ? parseInt(status as string) : undefined,
-        }
+        },
+        orderBy: {
+            created_at: orderBy === 'createdAt' ? 'desc' : undefined,
+        },
     });
 
     // Calculate total pages
