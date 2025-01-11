@@ -36,3 +36,33 @@ export const createFeedback = async (title: string, description: string, categor
 
     return feedback;
 };
+
+export const getFeedbacks = async () => {
+    const feedbacks = await prisma.feedback.findMany({
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            category: {
+                select: {
+                    id: true,
+                    title: true,
+                }
+            },
+            Status: {
+                select: {
+                    id: true,
+                    title: true,
+                }
+            },
+            author: {
+                select: {
+                    id: true,
+                    email: true,
+               }
+            }
+        }
+    });
+
+    return feedbacks;
+}
