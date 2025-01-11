@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createFeedback, deleteFeedback, getFeedbacks } from "./feedback.service";
+import { createFeedback, deleteFeedback, getFeedbacks, updateFeedback } from "./feedback.service";
 
 export const create = async (req: Request, res: Response) => {
     try{    
@@ -40,11 +40,30 @@ export const remove = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        await deleteFeedback(parseInt(id));
+        await deleteFeedback(parseInt(id), req.user!.id);
 
         res.status(200).json({
             message: 'Feedback deleted',
             data: [],
+        });
+    } catch (error: any) {
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message,
+        })
+    }
+}
+
+export const update = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { title, description, category, status } = req.body;
+
+        const updatedFeedback = await updateFeedback(parseInt(id), title, description, category, status, req.user!.id);
+
+        res.status(200).json({
+            message: 'Feedback updated',
+            data: updatedFeedback,
         });
     } catch (error: any) {
         res.status(500).json({

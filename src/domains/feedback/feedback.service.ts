@@ -88,8 +88,36 @@ export const getFeedbacks = async (req: Request) => {
     };
 }
 
-export const deleteFeedback = async (id: number) => {
-    const feedback = await prisma.feedback.delete({
-        where: {id}
+export const deleteFeedback = async (id: number, userId: number) => {
+    const feedback = await prisma.feedback.findUnique({
+        where: {id},
+    });
+
+    if (feedback?.author_id !== userId) {
+        throw new Error('You are not allowed to delete this feedback');
+    }
+
+    await prisma.feedback.delete({
+        where: {id},
     });
 }
+
+export const updateFeedback = async (id: number, title: string, description: string, category: number, status: number, userId: number) => {
+    const feedback = await prisma.feedback.findUnique({
+        where: {id},
+    });
+
+    if (feedback?.author_id !== userId) {
+        throw new Error('You are not allowed to update this feedback');
+    }
+
+    return await prisma.feedback.update({
+        data: {
+            title,
+            description,
+            category_id: category,
+            status_id: status,
+        },
+        where: {id},
+    });
+};
