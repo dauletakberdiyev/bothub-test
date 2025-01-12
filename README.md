@@ -11,5 +11,5 @@ npm install
 docker compose up -d
 
 # run development server
-3. npm run dev
+npm run dev
 ```
