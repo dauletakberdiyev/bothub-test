@@ -1,6 +1,50 @@
 import { Request, Response } from "express";
 import { registerUser, loginUser } from "./auth.service";
 
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: 
+ *      - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: some@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: somepassword
+ *               avatar:
+ *                 type: string
+ *                 example: someavatar
+ *     responses:
+ *      201:
+ *       description: User created successfully
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties:
+ *           message: 
+ *            type: string
+ *            example: User created successfully
+ *           data:
+ *            type: object
+ *            properties:
+ *             id:
+ *              type: integer
+ *              example: 1
+ *             email:
+ *              type: string
+ *              example: some@gmail.com
+ */
 export const register = async (req: Request, res: Response) => {
     try{
         const { email, password, avatar } = req.body;
@@ -19,6 +63,50 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: 
+ *      - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: some@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: somepassword
+ *     responses:
+ *      200:
+ *       description: User login successfully
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties:
+ *           message: 
+ *            type: string
+ *            example: User successfully login
+ *           data:
+ *            type: object
+ *            properties:
+ *             email:
+ *              type: string
+ *              example: some@gmail.com
+ *             token_type:
+ *              type: string
+ *              example: Bearer
+ *             token:
+ *              type: string
+ *              example: TOKEN     
+ */
 export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
