@@ -153,6 +153,7 @@ export const getFeedback = async (id: number) => {
             id: true,
             title: true,
             description: true,
+            created_at: true,
             category: {
                 select: {
                     id: true,
